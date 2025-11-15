@@ -1,19 +1,5 @@
 // Game state
-//let words = [];
-let words = [
-    "Elephant",
-    "Programming",
-    "Coffee",
-    "Mount Everest",
-    "i3 Window Manager",
-    "Pineapple Pizza",
-    "Quantum Physics",
-    "Linux Mint",
-    "VS Code",
-    "GitHub Pages",
-    "Banana",  // you can add more here
-    "Spaceship"
-];
+let words = [];
 let currentSet = 'A';
 let setA = [];
 let setB = [];
@@ -38,17 +24,17 @@ const timerDisplay = document.getElementById('timer');
 const finalScoreDisplay = document.getElementById('final-score');
 
 // Load words from JSON
-//async function loadWords() {
-//    try {
-//        const response = await fetch('data/words.json');
-//        const data = await response.json();
-//        words = data.words;
-//        console.log(`Loaded ${words.length} words`);
-//    } catch (error) {
-//        console.error('Error loading words:', error);
-//        wordDisplay.innerHTML = '<p>Error loading words. Check console.</p>';
-//    }
-//}
+async function loadWords() {
+    try {
+        const response = await fetch('data/words.json');
+        const data = await response.json();
+        words = data.words;
+        console.log(`Loaded ${words.length} words`);
+    } catch (error) {
+        console.error('Error loading words:', error);
+        wordDisplay.innerHTML = '<p>Error loading words. Check console.</p>';
+    }
+}
 
 // Get random unique words
 function getRandomWords(count) {
