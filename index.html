@@ -4,133 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>30 Seconds Game</title>
-    <!-- 1. We load Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                },
-            },
-        }
-    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+<base target="_blank">
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans flex items-center justify-center min-h-screen">
-
-    <div class="container mx-auto p-4 max-w-md w-full">
-
-        <!-- =================================== -->
-        <!-- SCREEN 1: START SCREEN (Visible by default) -->
-        <!-- =================================== -->
-        <div id="screen-start" class="text-center p-8 bg-white rounded-xl shadow-lg">
-            <h1 class="text-4xl font-bold text-blue-600 mb-6">30 Seconds</h1>
-            <p class="text-lg text-gray-700 mb-8">Get your team to guess the words on the card in 30 seconds!</p>
-            <button id="btn-start" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-xl shadow-md transition-all">
-                Start Game
-            </button>
+<body>
+    <div class="container">
+        <h1>🎮 30 Seconds</h1>
+        
+        <div id="setup-screen">
+            <button id="start-btn" class="btn-primary">Start Round</button>
         </div>
 
-        <!-- =================================== -->
-        <!-- SCREEN 2: GAME SCREEN (Hidden by default) -->
-        <!-- =================================== -->
-        <div id="screen-game" class="hidden">
-            <!-- Header: Timer -->
-            <div class="text-center mb-6">
-                <div id="timer-display" class="text-6xl font-bold text-gray-800 bg-white p-6 rounded-full w-40 h-40 flex items-center justify-center mx-auto shadow-xl border-4 border-blue-500">
-                    00:30
-                </div>
+        <div id="game-screen" style="display: none;">
+            <div class="timer" id="timer">30</div>
+            <div class="word-display" id="word-display">
+                <p>Loading words...</p>
             </div>
-
-            <!-- The Card -->
-            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <ul id="card-list" class="space-y-3 text-2xl text-gray-800">
-                    <!-- Words will be dynamically inserted here by JavaScript -->
-                    <li>Placeholder Word 1</li>
-                    <li>Placeholder Word 2</li>
-                    <li>Placeholder Word 3</li>
-                    <li>Placeholder Word 4</li>
-                    <li>Placeholder Word 5</li>
-                </ul>
+            <button id="flip-btn" class="btn-secondary">Flip Words</button>
+            <div class="score-controls">
+                <button id="correct-btn" class="btn-success">✓ Correct</button>
+                <button id="pass-btn" class="btn-warning">✗ Pass</button>
             </div>
-
-            <!-- Action Buttons -->
-            <div class="grid grid-cols-2 gap-4">
-                <button id="btn-skip" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-md transition-all">
-                    Skip
-                </button>
-                <button id="btn-correct" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-md transition-all">
-                    Correct!
-                </button>
-            </div>
-             
-            <!-- Temporary button to simulate timer ending -->
-            <button id="btn-end-round" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg mt-6 transition-all">
-                (Temp) Time's Up!
-            </button>
+            <button id="stop-btn" class="btn-danger">Stop Round</button>
         </div>
 
-        <!-- =================================== -->
-        <!-- SCREEN 3: SCORE SCREEN (Hidden by default) -->
-        <!-- =================================== -->
-        <div id="screen-score" class="hidden text-center p-8 bg-white rounded-xl shadow-lg">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Round Over!</h2>
-            <p class="text-xl text-gray-700 mb-6">You scored:</p>
-            <div id="score-display" class="text-7xl font-bold text-blue-600 mb-8">
-                0
-            </div>
-            <button id="btn-next-round" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-xl shadow-md transition-all">
-                Next Round
-            </button>
+        <div id="score-screen" style="display: none;">
+            <h2>Round Over!</h2>
+            <p class="final-score">Score: <span id="final-score">0</span></p>
+            <button id="new-round-btn" class="btn-primary">New Round</button>
         </div>
-
     </div>
 
-    <!-- 2. This is our JavaScript for controlling the "screens" -->
-    <script>
-        // Get references to our 3 "screens"
-        const screenStart = document.getElementById('screen-start');
-        const screenGame = document.getElementById('screen-game');
-        const screenScore = document.getElementById('screen-score');
-
-        // Get references to our main buttons
-        const btnStart = document.getElementById('btn-start');
-        const btnEndRound = document.getElementById('btn-end-round'); // Temporary button
-        const btnNextRound = document.getElementById('btn-next-round');
-
-        // --- Event Listeners ---
-        
-        // When "Start Game" is clicked...
-        btnStart.addEventListener('click', () => {
-            // Hide the start screen
-            screenStart.classList.add('hidden');
-            // Show the game screen
-            screenGame.classList.remove('hidden');
-        });
-
-        // When our temporary "Time's Up" button is clicked...
-        btnEndRound.addEventListener('click', () => {
-            // Hide the game screen
-            screenGame.classList.add('hidden');
-            // Show the score screen
-            screenScore.classList.remove('hidden');
-        });
-        
-        // When "Next Round" is clicked...
-        btnNextRound.addEventListener('click', () => {
-            // Hide the score screen
-            screenScore.classList.add('hidden');
-            // Show the game screen again
-            screenGame.classList.remove('hidden');
-            // We'll also need to reset the timer and get a new card, but we'll do that later.
-        });
-
-        // We will add logic for 'btn-skip' and 'btn-correct' in the next step.
-        // For now, they do nothing.
-
-    </script>
-
+    <script src="js/game.js"></script>
 </body>
 </html>
